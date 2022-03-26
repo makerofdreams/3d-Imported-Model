@@ -10,5 +10,4 @@ npm run dev
 npm run build
 
 <hr>
-Saitama Model by MMKH
-* author:	MMKH (https://sketchfab.com/mmkh)
+Saitama Model by MMKH (https://sketchfab.com/mmkh)
