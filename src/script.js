@@ -1,14 +1,3 @@
-// preloader 
-document.onreadystatechange = function () {
-    if (document.readyState !== "complete") {
-        document.querySelector("body").style.visibility = "hidden";
-        document.querySelector("#loader").style.visibility = "visible";
-    } else {
-        document.querySelector("#loader").style.display = "none";
-        document.querySelector("body").style.visibility = "visible";
-    }
-};
-
 import './style.css'
 import * as dat from 'dat.gui'
 import * as THREE from 'three'
@@ -114,6 +103,7 @@ gltfLoader.load(
         const poleLightAMesh = gltf.scene.children.find(child => child.name === 'poleLightA')
         const poleLightBMesh = gltf.scene.children.find(child => child.name === 'poleLightB')
 
+
         bakedMesh.material = bakedMaterial
         portalLightMesh.material = portalLightMaterial
         poleLightAMesh.material = poleLightMaterial
@@ -200,6 +190,8 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 controls.maxPolarAngle = 1.55
+controls.autoRotate = true
+controls.autoRotateSpeed = 0.5
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
