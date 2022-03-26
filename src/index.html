@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- internal code for preloader  -->
+    <script>
+        window.onload = function () {
+            document.getElementById('loader').style.display = "none"
+            if (document.readyState === "complete") {
+                document.getElementsByClassName('webgl')[0].style.display = "block"
+            }
+        }
+        let playing = false
+        window.addEventListener('click',  () => {
+            let audio = document.getElementById("audio")
+            audio.play()
+        })
+
+        window.addEventListener('dblclick', () => {
+            audio.pause()
+        })
+    </script>
+    <style>
+        #content {
+            display: none;
+        }
+
+        #content img {
+            width: 100%;
+        }
+
+        #loader {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 400px;
+            height: 400px;
+        }
+
+        #loader img {
+            width: 400px;
+        }
+    </style>
     <title>3d Imported Model From Blender</title>
 </head>
+
 <body>
-    <div id="loader" class="center">ff</div>
+    <div id="loader">
+        <img src="https://media3.giphy.com/media/3ohzdOXZARMFbaqch2/giphy.gif" />
+        <h3 style="text-align: center;">Overwhelming Powers Loading...</h3>
+        <h4 style="text-align: center;">(Click on screen to play or dblclick to pause audio)</h4>
+        <h5 style="text-align: center;">Optmization in not done, waiting time can be long</h5>
+    </div>
+    <audio autoplay id="audio">
+        <source src="  https://www.redringtones.com/wp-content/uploads/2019/11/one-punch-man-theme.mp3"
+            type="audio/mp3">
+    </audio>
+
     <canvas class="webgl"></canvas>
 </body>
+
 </html>
