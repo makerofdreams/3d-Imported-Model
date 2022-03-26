@@ -1,9 +1,15 @@
 import './style.css'
 import * as dat from 'dat.gui'
 import * as THREE from 'three'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
-import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js'
+import {
+    OrbitControls
+} from 'three/examples/jsm/controls/OrbitControls.js'
+import {
+    GLTFLoader
+} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {
+    DRACOLoader
+} from 'three/examples/jsm/loaders/DRACOLoader.js'
 import firefliesVertexShader from './shaders/fireflies/vertex.glsl'
 import firefliesFragmentShader from './shaders/fireflies/fragment.glsl'
 import portalVertexShader from './shaders/portal/vertex.glsl'
@@ -20,6 +26,15 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+scene.add(ambientLight)
+
+const light = new THREE.PointLight(0xffffff, 0.5)
+light.position.x = 2
+light.position.y = 3
+light.position.z = 4
+scene.add(light)
 
 // Draco loader
 const dracoLoader = new DRACOLoader()
@@ -47,7 +62,7 @@ const poleLightMaterial = new THREE.MeshBasicMaterial({
 
 // Portal Light 
 debugObject.portalColorStart = '#000000'
-debugObject.portalColorEnd = '#f7f7f7'
+debugObject.portalColorEnd = '#8a85f2'
 
 gui
     .addColor(debugObject, 'portalColorStart')
@@ -74,31 +89,28 @@ const portalLightMaterial = new THREE.ShaderMaterial({
         }
     },
     vertexShader: portalVertexShader,
-    fragmentShader: portalFragmentShader
+    fragmentShader: portalFragmentShader,
+    side: THREE.DoubleSide
 })
 
 // Model 
 gltfLoader.load(
     'portal.glb',
     (gltf) => {
-        gltf.scene.traverse((child) => {
-            child.material = bakedMaterial
-        })
 
+        const bakedMesh = gltf.scene.children.find((child) => child.name === 'baked')
         const portalLightMesh = gltf.scene.children.find(child => child.name === 'portalLight')
         const poleLightAMesh = gltf.scene.children.find(child => child.name === 'poleLightA')
         const poleLightBMesh = gltf.scene.children.find(child => child.name === 'poleLightB')
-        const textMesh = gltf.scene.children.find(child => child.name === 'Text')
 
+        bakedMesh.material = bakedMaterial
         portalLightMesh.material = portalLightMaterial
         poleLightAMesh.material = poleLightMaterial
         poleLightBMesh.material = poleLightMaterial
-        textMesh.material = poleLightMaterial
 
         scene.add(gltf.scene)
     }
 )
-
 // Particles
 const firefliesGeometry = new THREE.BufferGeometry()
 const firefliesCount = 35
@@ -167,15 +179,16 @@ window.addEventListener('resize', () => {
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 2.20
-camera.position.y = 1.19
-camera.position.z = 5.38
+camera.position.x = 2.14
+camera.position.y = 1.44
+camera.position.z = 5.33
 
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+controls.maxPolarAngle = 1.55
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -209,8 +222,8 @@ const tick = () => {
     // Render
     renderer.render(scene, camera)
 
-     // Update fireflies
-     firefliesMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2)
+    // Update fireflies
+    firefliesMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2)
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
