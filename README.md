@@ -8,3 +8,6 @@ npm run dev
 
 ## To build 
 npm run build
+
+# Saitama Model by MMKH
+* author:	MMKH (https://sketchfab.com/mmkh)
